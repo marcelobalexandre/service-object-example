@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.dev
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    network_mode: host
+    environment:
+      - RAILS_ENV=${RAILS_ENV:-development}
+    volumes:
+      - .:/opt/ruby-app
+      - bundle_cache:/usr/local/bundle
+    tty: true
+    profiles:
+      - dev
+
+volumes:
+  bundle_cache:
