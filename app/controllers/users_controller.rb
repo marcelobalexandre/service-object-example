@@ -12,6 +12,6 @@ class UsersController < ApplicationController
   private
 
   def create_user_params
-    params.require(:user).permit(:name, :email)
+    params.require(:user).permit(:name, :email, :phone_number, :telegram_chat_id, notification_preferences: {})
   end
 end
