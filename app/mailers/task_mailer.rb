@@ -5,7 +5,7 @@ class TaskMailer < ApplicationMailer
     task = params[:task]
 
     mail(to: task.user.email, subject: 'Task completed notification') do |format|
-      format.text { render(plain: "Task #{task.name} completed!") }
+      format.text { render(plain: "Task \"#{task.name}\" completed!") }
     end
   end
 end

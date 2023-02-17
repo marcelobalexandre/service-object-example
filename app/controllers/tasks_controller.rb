@@ -28,6 +28,32 @@ class TasksController < ApplicationController
 
     TaskMailer.with(task:).task_completed_notification.deliver_later
 
+    sms_client = FakeSmsClient.new(
+      account_id: ENV.fetch('FAKE_SMS_ACCOUNT_ID'),
+      auth_token: ENV.fetch('FAKE_SMS_AUTH_TOKEN')
+    )
+    sms_client.send_sms(
+      from: ENV.fetch('FAKE_SMS_PHONE_NUMBER'),
+      to: task.user.phone_number,
+      body: "Task \"#{task.name}\" completed!"
+    )
+
+    telegram_client = FakeTelegramClient.new(auth_token: ENV.fetch('FAKE_TELEGRAM_AUTH_TOKEN'))
+    telegram_client.send_message(
+      chat_id: task.user.telegram_chat_id,
+      text: "Task \"#{task.name}\" completed!"
+    )
+
+    whatsapp_client = FakeWhatsappClient.new(
+      account_id: ENV.fetch('FAKE_WHATSAPP_ACCOUNT_ID'),
+      auth_token: ENV.fetch('FAKE_WHATSAPP_AUTH_TOKEN')
+    )
+    whatsapp_client.send_message(
+      from: "whatsapp:#{ENV.fetch('FAKE_WHATSAPP_PHONE_NUMBER')}",
+      to: "whatsapp:#{task.user.phone_number}",
+      body: "Task \"#{task.name}\" completed!"
+    )
+
     render(json: task)
   end
 

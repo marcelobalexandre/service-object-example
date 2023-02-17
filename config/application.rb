@@ -8,10 +8,14 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv::Railtie.load if %w[development test].include?(ENV['RAILS_ENV'])
+
 module ServiceObjectExample
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+
+    config.autoload_paths << "#{root}/lib"
 
     # Configuration for the application, engines, and railties goes here.
     #
