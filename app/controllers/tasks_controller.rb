@@ -26,6 +26,8 @@ class TasksController < ApplicationController
 
     task.update!(status: :completed, completed_at: Time.current)
 
+    TaskMailer.with(task:).task_completed_notification.deliver_later
+
     render(json: task)
   end
 
