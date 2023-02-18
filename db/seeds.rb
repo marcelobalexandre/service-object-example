@@ -5,7 +5,7 @@ user = User.create!(
   email: 'phoebe@buffay.com',
   phone_number: '+1111111111',
   telegram_chat_id: 'phoebe-buffay',
-  notification_preferences: { task_completed: %i[sms telegram whatsapp] }
+  notification_preferences: { task_completed: %i[email sms telegram whatsapp] }
 )
 user.tasks.create!(name: 'Record Smelly Cat', status: :pending)
 

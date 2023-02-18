@@ -36,9 +36,11 @@ class TasksController < ApplicationController
 
     task.update!(status: :completed, completed_at: Time.current)
 
-    TaskMailer.with(task:).task_completed_notification.deliver_later
-
     if task.user.notification_preferences['task_completed'].present?
+      if task.user.notification_preferences['task_completed'].include?('email')
+        TaskMailer.with(task:).task_completed_notification.deliver_now
+      end
+
       if task.user.notification_preferences['task_completed'].include?('sms')
         sms_client = FakeSmsClient.new(
           account_id: ENV.fetch('FAKE_SMS_ACCOUNT_ID'),

@@ -20,7 +20,9 @@ class User < ApplicationRecord
   end
 
   def notification_preferences_cannot_include_invalid_channels
-    return if (notification_preferences || {}).values.flatten.all? { |value| %w[sms telegram whatsapp].include?(value) }
+    return if (notification_preferences || {}).values.flatten.all? do |value|
+                %w[email sms telegram whatsapp].include?(value)
+              end
 
     errors.add(:notification_preferences, 'contains invalid notification channel')
   end
