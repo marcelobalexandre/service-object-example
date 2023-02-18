@@ -4,9 +4,19 @@ class UsersController < ApplicationController
   def create
     user = User.new(create_user_params)
 
-    user.save!
-
-    render(status: :created, json: user)
+    if user.save
+      render(status: :created, json: user)
+    else
+      render(
+        status: :unprocessable_entity,
+        json: {
+          error: {
+            message: 'Validation error',
+            details: user.errors.full_messages
+          }
+        }
+      )
+    end
   end
 
   private

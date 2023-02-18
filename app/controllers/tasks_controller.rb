@@ -2,27 +2,37 @@
 
 class TasksController < ApplicationController
   def index
-    tasks = Task.where(user_id: params[:user_id])
+    tasks = user.tasks
 
     render(json: tasks)
   end
 
   def show
-    task = Task.find_by(id: params[:id], user_id: params[:user_id])
+    task = user.tasks.find(params[:id])
 
     render(json: task)
   end
 
   def create
-    task = Task.new(create_task_params.merge(user_id: params[:user_id], status: :pending))
+    task = user.tasks.new(create_task_params.merge(status: :pending))
 
-    task.save!
-
-    render(status: :created, json: task)
+    if task.save
+      render(status: :created, json: task)
+    else
+      render(
+        status: :unprocessable_entity,
+        json: {
+          error: {
+            message: 'Validation error',
+            details: task.errors.full_messages
+          }
+        }
+      )
+    end
   end
 
   def complete
-    task = Task.find_by(id: params[:id], user_id: params[:user_id])
+    task = user.tasks.find(params[:id])
 
     task.update!(status: :completed, completed_at: Time.current)
 
@@ -67,7 +77,11 @@ class TasksController < ApplicationController
 
   private
 
+  def user
+    @user ||= User.find(params[:user_id])
+  end
+
   def create_task_params
-    params.require(:task).permit(:user_id, :name)
+    params.require(:task).permit(:name)
   end
 end

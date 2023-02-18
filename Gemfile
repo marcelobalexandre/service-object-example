@@ -43,10 +43,13 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   gem 'dotenv-rails', '~> 2.8', '>= 2.8.1'
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'rspec-rails', '~> 6.0', '>= 6.0.1'
 end
 
 group :development do
   gem 'rubocop', '~> 1.45', '>= 1.45.1'
+  gem 'rubocop-rspec', '~> 2.18', '>= 2.18.1'
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
