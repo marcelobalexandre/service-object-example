@@ -1,11 +1,11 @@
 require 'swagger_helper'
 
 RSpec.describe 'Tasks', type: :request do
-  path '/users/:user_id/tasks' do
+  path '/users/{user_id}/tasks' do
     get 'Retrieves all tasks' do
       tags 'Tasks'
       consumes 'application/json'
-      parameter name: :user_id, in: :path, type: :string, required: true
+      parameter name: :user_id, in: :path, type: :string, required: true, example: 1
 
       response '200', 'tasks found' do
         schema type: :array,
@@ -41,13 +41,16 @@ RSpec.describe 'Tasks', type: :request do
     post 'Creates a task' do
       tags 'Tasks'
       consumes 'application/json'
-      parameter name: :user_id, in: :path, type: :string, required: true
+      parameter name: :user_id, in: :path, type: :string, required: true, example: 1
       parameter name: :task, in: :body, schema: {
         type: :object,
         properties: {
           name: { type: :string }
         },
-        required: %w[name]
+        required: %w[name],
+        example: {
+          name: 'Buy coffee'
+        }
       }
 
       response '201', 'task created' do
@@ -97,8 +100,8 @@ RSpec.describe 'Tasks', type: :request do
       get 'Retrieves a task' do
         tags 'Tasks'
         consumes 'application/json'
-        parameter name: :user_id, in: :path, type: :string, required: true
-        parameter name: :id, in: :path, type: :string, required: true
+        parameter name: :user_id, in: :path, type: :string, required: true, example: 1
+        parameter name: :id, in: :path, type: :string, required: true, example: 1
 
         response '200', 'task found' do
           schema type: :object,
@@ -133,8 +136,8 @@ RSpec.describe 'Tasks', type: :request do
       patch 'Completes a task' do
         tags 'Tasks'
         consumes 'application/json'
-        parameter name: :user_id, in: :path, type: :string, required: true
-        parameter name: :id, in: :path, type: :string, required: true
+        parameter name: :user_id, in: :path, type: :string, required: true, example: 1
+        parameter name: :id, in: :path, type: :string, required: true, example: 1
 
         response '200', 'task completed' do
           schema type: :object,

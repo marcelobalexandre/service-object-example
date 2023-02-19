@@ -4,7 +4,7 @@ info:
   title: TO-DO Bonito - API V1
   version: v1
 paths:
-  "/users/:user_id/tasks":
+  "/users/{user_id}/tasks":
     get:
       summary: Retrieves all tasks
       tags:
@@ -13,6 +13,7 @@ paths:
       - name: user_id
         in: path
         required: true
+        example: 1
         schema:
           type: string
       responses:
@@ -28,6 +29,7 @@ paths:
       - name: user_id
         in: path
         required: true
+        example: 1
         schema:
           type: string
       responses:
@@ -47,6 +49,8 @@ paths:
                   type: string
               required:
               - name
+              example:
+                name: Buy coffee
   "/users/{user_id}/tasks/{id}":
     get:
       summary: Retrieves a task
@@ -56,11 +60,13 @@ paths:
       - name: user_id
         in: path
         required: true
+        example: 1
         schema:
           type: string
       - name: id
         in: path
         required: true
+        example: 1
         schema:
           type: string
       responses:
@@ -77,11 +83,13 @@ paths:
       - name: user_id
         in: path
         required: true
+        example: 1
         schema:
           type: string
       - name: id
         in: path
         required: true
+        example: 1
         schema:
           type: string
       responses:
