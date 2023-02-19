@@ -1,24 +1,39 @@
-# README
+# TO-DO Bonito
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## System dependencies
 
-Things you may want to cover:
+- Ruby 3.2.0
+- SQLite
+- Docker
 
-* Ruby version
+## Setup
 
-* System dependencies
+```bash
+# Install dependencies
+$ dbin/bundle
 
-* Configuration
+# Create database and seed data
+$ dbin/rails db:setup
+```
 
-* Database creation
+## Running tests
 
-* Database initialization
+```bash
+$ dbin/rspec
+```
 
-* How to run the test suite
+## Running linter
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+$ dbin/rubocop
+```
 
-* Deployment instructions
+## Start the application
 
-* ...
+```bash
+$ dbin/rails s
+```
+
+## API Docs
+
+- http://localhost:3000/api-docs
