@@ -6,6 +6,12 @@ class ApplicationController < ActionController::API
   private
 
   def record_not_found
-    render(status: :not_found, json: { error: { message: 'Not found' } })
+    serialized_error = {
+      'error' => {
+        'message' => 'Not found'
+      }
+    }
+
+    render(status: :not_found, json: serialized_error)
   end
 end

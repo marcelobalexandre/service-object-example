@@ -27,7 +27,15 @@ RSpec.describe 'Tasks' do
       it 'returns the new task in the response' do
         post("/users/#{user.id}/tasks", params:)
 
-        expect(JSON.parse(response.body)).to eq(user.tasks.last.as_json)
+        new_task = user.tasks.last
+        expect(JSON.parse(response.body)).to eq(
+          'id' => new_task.id,
+          'userId' => user.id,
+          'status' => new_task.status,
+          'name' => new_task.name,
+          'createdAt' => new_task.created_at.as_json,
+          'completedAt' => new_task.completed_at
+        )
       end
     end
 

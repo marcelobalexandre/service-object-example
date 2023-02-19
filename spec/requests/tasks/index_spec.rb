@@ -18,7 +18,19 @@ RSpec.describe 'Tasks' do
       it 'returns user tasks in the response' do
         get("/users/#{user.id}/tasks")
 
-        expect(JSON.parse(response.body)).to eq(user.tasks.as_json)
+        expect(JSON.parse(response.body))
+          .to eq(
+            user.tasks.map do |task|
+              {
+                'id' => task.id,
+                'userId' => user.id,
+                'status' => task.status,
+                'name' => task.name,
+                'createdAt' => task.created_at.as_json,
+                'completedAt' => task.completed_at.as_json
+              }
+            end
+          )
       end
     end
 

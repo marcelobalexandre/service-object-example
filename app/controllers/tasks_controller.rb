@@ -4,30 +4,58 @@ class TasksController < ApplicationController
   def index
     tasks = user.tasks
 
-    render(json: tasks)
+    serialized_tasks = tasks.map do |task|
+      {
+        'id' => task.id,
+        'userId' => user.id,
+        'status' => task.status,
+        'name' => task.name,
+        'createdAt' => task.created_at,
+        'completedAt' => task.completed_at
+      }
+    end
+
+    render(json: serialized_tasks)
   end
 
   def show
     task = user.tasks.find(params[:id])
 
-    render(json: task)
+    serializer_task = {
+      'id' => task.id,
+      'userId' => user.id,
+      'status' => task.status,
+      'name' => task.name,
+      'createdAt' => task.created_at,
+      'completedAt' => task.completed_at
+    }
+
+    render(json: serializer_task)
   end
 
   def create
     task = user.tasks.new(create_task_params.merge(status: :pending))
 
     if task.save
-      render(status: :created, json: task)
+      serializer_task = {
+        'id' => task.id,
+        'userId' => user.id,
+        'status' => task.status,
+        'name' => task.name,
+        'createdAt' => task.created_at,
+        'completedAt' => task.completed_at
+      }
+
+      render(status: :created, json: serializer_task)
     else
-      render(
-        status: :unprocessable_entity,
-        json: {
-          error: {
-            message: 'Validation error',
-            details: task.errors.full_messages
-          }
+      serializer_error = {
+        'error' => {
+          'message' => 'Validation error',
+          'details' => task.errors.full_messages
         }
-      )
+      }
+
+      render(status: :unprocessable_entity, json: serializer_error)
     end
   end
 
@@ -74,7 +102,16 @@ class TasksController < ApplicationController
       end
     end
 
-    render(json: task)
+    serialized_task = {
+      'id' => task.id,
+      'userId' => user.id,
+      'status' => task.status,
+      'name' => task.name,
+      'createdAt' => task.created_at,
+      'completedAt' => task.completed_at
+    }
+
+    render(json: serialized_task)
   end
 
   private

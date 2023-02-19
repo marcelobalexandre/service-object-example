@@ -30,7 +30,15 @@ RSpec.describe 'Users' do
       it 'returns the new user in the response' do
         post('/users', params:)
 
-        expect(JSON.parse(response.body)).to eq(User.last.as_json)
+        new_user = User.last
+        expect(JSON.parse(response.body)).to eq(
+          'id' => new_user.id,
+          'name' => new_user.name,
+          'email' => new_user.email,
+          'phoneNumber' => new_user.phone_number,
+          'telegramChatId' => new_user.telegram_chat_id,
+          'notificationPreferences' => new_user.notification_preferences
+        )
       end
     end
 

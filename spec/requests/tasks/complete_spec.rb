@@ -6,7 +6,7 @@ RSpec.describe 'Tasks' do
   describe 'PATCH /users/:user_id/tasks/:task_id/complete' do
     let(:task) { create(:task) }
 
-    context 'when task exists' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    context 'when task exists' do
       let(:sms_client) { instance_double(FakeSmsClient, send_sms: nil) }
       let(:telegram_client) { instance_double(FakeTelegramClient, send_message: nil) }
       let(:whatsapp_client) { instance_double(FakeWhatsappClient, send_message: nil) }
@@ -63,10 +63,18 @@ RSpec.describe 'Tasks' do
       it 'returns updated task in the response' do
         patch("/users/#{task.user.id}/tasks/#{task.id}/complete")
 
-        expect(JSON.parse(response.body)).to eq(task.reload.as_json)
+        updated_task = task.reload
+        expect(JSON.parse(response.body)).to eq(
+          'id' => updated_task.id,
+          'userId' => updated_task.user.id,
+          'status' => updated_task.status,
+          'name' => updated_task.name,
+          'createdAt' => updated_task.created_at.as_json,
+          'completedAt' => updated_task.completed_at.as_json
+        )
       end
 
-      context 'when user has notification enabled to email, SMS, Telegram and Whatsapp' do # rubocop:disable RSpec/NestedGroups, RSpec/MultipleMemoizedHelpers
+      context 'when user has notification enabled to email, SMS, Telegram and Whatsapp' do
         let(:user) { create(:user, notification_preferences: { task_completed: %i[email sms telegram whatsapp] }) }
         let(:task) { create(:task, user:) }
 
@@ -94,7 +102,7 @@ RSpec.describe 'Tasks' do
         end
       end
 
-      context 'when user has notification enabled to email, SMS and Telegram only' do # rubocop:disable RSpec/NestedGroups, RSpec/MultipleMemoizedHelpers
+      context 'when user has notification enabled to email, SMS and Telegram only' do
         let(:user) { create(:user, notification_preferences: { task_completed: %i[email sms telegram] }) }
         let(:task) { create(:task, user:) }
 
@@ -122,7 +130,7 @@ RSpec.describe 'Tasks' do
         end
       end
 
-      context 'when user has notification enabled to email, SMS and Whatsapp only' do # rubocop:disable RSpec/NestedGroups, RSpec/MultipleMemoizedHelpers
+      context 'when user has notification enabled to email, SMS and Whatsapp only' do
         let(:user) { create(:user, notification_preferences: { task_completed: %i[email sms whatsapp] }) }
         let(:task) { create(:task, user:) }
 
@@ -150,7 +158,7 @@ RSpec.describe 'Tasks' do
         end
       end
 
-      context 'when user has notification enabled to email, Telegram and Whatsapp only' do # rubocop:disable RSpec/NestedGroups, RSpec/MultipleMemoizedHelpers
+      context 'when user has notification enabled to email, Telegram and Whatsapp only' do
         let(:user) { create(:user, notification_preferences: { task_completed: %i[email telegram whatsapp] }) }
         let(:task) { create(:task, user:) }
 
@@ -178,7 +186,7 @@ RSpec.describe 'Tasks' do
         end
       end
 
-      context 'when user has notification disabled' do # rubocop:disable RSpec/NestedGroups, RSpec/MultipleMemoizedHelpers
+      context 'when user has notification disabled' do
         let(:user) { create(:user, notification_preferences: { task_completed: [] }) }
         let(:task) { create(:task, user:) }
 
