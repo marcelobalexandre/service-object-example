@@ -4,6 +4,93 @@ info:
   title: TO-DO Bonito - API V1
   version: v1
 paths:
+  "/users/:user_id/tasks":
+    get:
+      summary: Retrieves all tasks
+      tags:
+      - Tasks
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: tasks found
+        '404':
+          description: not found
+    post:
+      summary: Creates a task
+      tags:
+      - Tasks
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: task created
+        '404':
+          description: not found
+        '422':
+          description: unprocessable entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
+  "/users/{user_id}/tasks/{id}":
+    get:
+      summary: Retrieves a task
+      tags:
+      - Tasks
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task found
+        '404':
+          description: not found
+  "/users/{user_id}/tasks/{id}/complete":
+    patch:
+      summary: Completes a task
+      tags:
+      - Tasks
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: task completed
+        '404':
+          description: not found
+        '422':
+          description: unprocessable entity
   "/users":
     get:
       summary: List all users
